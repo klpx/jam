@@ -11,7 +11,9 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     Jam::Client client;
-    engine.rootContext()->setContextProperty("jamClient", &client);
+    QQmlContext *rootContext = engine.rootContext();
+
+    rootContext->setContextProperty("jamClient", &client);
 
     engine.load(QUrl(QStringLiteral("qrc:///login.qml")));
 

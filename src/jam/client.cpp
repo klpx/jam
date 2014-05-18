@@ -16,13 +16,16 @@ void Jam::Client::connect(QString username, QString password)
 {
     connection_thread = std::thread(
         [this] (QString username, QString password) {
+            connection_thread_started = true;
+
             j_jid.setJID("jam@xmpp.ru");
 
-            j_clientp = new gloox::Client(j_jid, "*******");
+            j_clientp = new gloox::Client(j_jid, "******");
             j_clientp->registerConnectionListener(this);
             j_clientp->registerPresenceHandler(this);
 
-            connection_thread_started = true;
+            j_clientp->rosterManager()->registerRosterListener(&roster, false);
+
             j_clientp->connect(true);
         },
         username, password

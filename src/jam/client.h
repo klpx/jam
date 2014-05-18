@@ -12,14 +12,19 @@
 
 #include <thread>
 
+#include "src/jam/roster.h"
+
 namespace Jam {
     class Client;
 }
 
-class Jam::Client : public QObject, gloox::ConnectionListener, gloox::PresenceHandler
+class Jam::Client :
+        public QObject,
+        gloox::ConnectionListener, gloox::PresenceHandler
 {
     Q_OBJECT
     Q_PROPERTY(bool connected READ isConnected)
+    Q_PROPERTY(Jam::Roster* roster READ getRoster)
 
 public:
     Client(QObject *parent=0) : QObject(parent) { connected = false; }
@@ -31,6 +36,7 @@ public:
     virtual void onDisconnect( gloox::ConnectionError  );
 
     bool isConnected() const { return connected; }
+    Jam::Roster *getRoster() { return &roster; }
 
 public slots:
     void connect(QString, QString);
@@ -45,6 +51,8 @@ private:
 
     std::thread connection_thread;
     bool connection_thread_started = false;
+
+    Jam::Roster roster;
 };
 
 #endif // JAMCLIENT_H
