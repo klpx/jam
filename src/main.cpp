@@ -1,22 +1,19 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 
-#include <gloox/jid.h>
-#include <gloox/client.h>
+#include "jam/client.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:///main.qml")));
 
-    gloox::JID jid;
-    jid.setServer("domain-xmpp.ya.ru");
-    jid.setUsername("alex@arigativa.ru");
+    Jam::Client client;
+    engine.rootContext()->setContextProperty("jamClient", &client);
 
-    gloox::Client client(jid, "*****");
-    client.connect();
+    engine.load(QUrl(QStringLiteral("qrc:///login.qml")));
 
     return app.exec();
 }

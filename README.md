@@ -1,4 +1,4 @@
-jim
+Jam
 ===
 
 Nice XMPP instant messanger

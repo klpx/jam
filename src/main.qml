@@ -2,7 +2,7 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 
 ApplicationWindow {
-    id: app
+    id: messengerWindow
     visible: true
     width: 640
     height: 480
@@ -12,6 +12,14 @@ ApplicationWindow {
         color: "black"
         clip: true
         anchors.fill: parent
+
+        Button {
+            id: button1
+            x: 288
+            y: 262
+            text: qsTr("Ping")
+            onClicked: jamClient.ping()
+        }
     }
 
     ListView {
@@ -44,7 +52,6 @@ ApplicationWindow {
                         color: "#161617"
 
                         Text {
-                            text: contactList.positionViewAtEnd()
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: true
                             color: "white"
