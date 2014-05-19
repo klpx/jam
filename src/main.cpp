@@ -1,8 +1,10 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QtQml>
 
 #include "jam/client.h"
+#include "ui/contact.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +14,10 @@ int main(int argc, char *argv[])
 
     Jam::Client client;
     QQmlContext *rootContext = engine.rootContext();
+
+    qmlRegisterType<Jam::Client>  ("Client",  1, 0, "Client");
+    qmlRegisterType<Jam::Contact> ("Contact", 1, 0, "Contact");
+    qmlRegisterType<Jam::Roster>  ("Roster",  1, 0, "Roster");
 
     rootContext->setContextProperty("jamClient", &client);
 

@@ -2,12 +2,15 @@
 #define JAM_ROSTER_H
 
 #include <QObject>
+#include <QQmlListProperty>
 
 #include <gloox/client.h>
 #include <gloox/rosterlistener.h>
 #include <gloox/rostermanager.h>
 #include <gloox/presence.h>
 #include <gloox/iq.h>
+
+#include "../ui/contact.h"
 
 namespace Jam {
     class Roster;
@@ -18,9 +21,13 @@ class Jam::Roster :
         public gloox::RosterListener
 {
     Q_OBJECT
+    
+    Q_PROPERTY(QQmlListProperty<Jam::Contact> contacts READ contacts NOTIFY onContactsChanged CONSTANT)
 
 public:
-    Roster(QObject *parent=0) : QObject(parent) {}
+    Roster(QObject *parent = 0) : QObject(parent) {}
+
+    QQmlListProperty<Jam::Contact> contacts();
 
     virtual void handleItemAdded (const gloox::JID &jid);
     virtual void handleItemSubscribed (const gloox::JID &jid);
@@ -35,10 +42,14 @@ public:
     virtual void handleNonrosterPresence (const gloox::Presence &presence);
     virtual void handleRosterError (const gloox::IQ &iq);
 
+signals:
+    void onContactsChanged();
+
 private:
 //    gloox::Client *j_client = 0;
 //    gloox::RosterManager *j_roster_manager = 0;
     const gloox::Roster *roster = 0;
+    QList<Jam::Contact *> j_contacts;
 };
 
 #endif // JAM_ROSTER_H

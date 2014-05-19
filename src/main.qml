@@ -18,7 +18,12 @@ ApplicationWindow {
             x: 288
             y: 262
             text: qsTr("Ping")
-            onClicked: jamClient.ping()
+            onClicked: {
+                for (var i in jamClient.roster.contacts) {
+                    console.log(jamClient.roster.contacts[i].name)
+                }
+                jamClient.ping()
+            }
         }
     }
 
@@ -55,91 +60,12 @@ ApplicationWindow {
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: true
                             color: "white"
+                            text: model.name
                         }
                     }
                 }
             }
         }
-        model: ListModel {
-            ListElement {
-                name: "Grey"
-                colorCode: "grey"
-            }
-
-            ListElement {
-                name: "Red"
-                colorCode: "red"
-            }
-
-            ListElement {
-                name: "Blue"
-                colorCode: "blue"
-            }
-
-            ListElement {
-                name: "Green"
-                colorCode: "green"
-            }
-
-            ListElement {
-                name: "Green"
-                colorCode: "green"
-            }
-
-            ListElement {
-                name: "Green"
-                colorCode: "green"
-            }
-
-            ListElement {
-                name: "Green"
-                colorCode: "green"
-            }
-
-            ListElement {
-                name: "Green"
-                colorCode: "green"
-            }
-
-            ListElement {
-                name: "Green"
-                colorCode: "green"
-            }
-
-            ListElement {
-                name: "Green"
-                colorCode: "green"
-            }
-
-            ListElement {
-                name: "Blue"
-                colorCode: "blue"
-            }
-
-
-            ListElement {
-                name: "Blue"
-                colorCode: "blue"
-            }
-
-
-            ListElement {
-                name: "Blue"
-                colorCode: "blue"
-            }
-
-
-            ListElement {
-                name: "Blue"
-                colorCode: "blue"
-            }
-
-
-            ListElement {
-                name: "Blue"
-                colorCode: "blue"
-            }
-
-        }
+        model: jamClient.roster.contacts
     }
 }

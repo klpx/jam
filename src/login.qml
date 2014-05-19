@@ -13,6 +13,11 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
+    Connections {
+         target: jamClient
+         onConnectedChanged: switchToMainWindow()
+    }
+
     Rectangle {
         color: "black"
         anchors.rightMargin: 0
@@ -57,10 +62,13 @@ ApplicationWindow {
             y: 263
             text: qsTr("Sign in")
             onClicked: {
-                jamClient.connect(usernameInput.getText(), passwordInput.getText())
-                loginWindow.close()
-                loader.source="main.qml"
+                jamClient.connect(usernameInput.getText(), passwordInput.getText());
             }
         }
+    }
+
+    function switchToMainWindow() {
+        loginWindow.close()
+        loader.source="main.qml"
     }
 }

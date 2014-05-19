@@ -23,11 +23,11 @@ class Jam::Client :
         gloox::ConnectionListener, gloox::PresenceHandler
 {
     Q_OBJECT
-    Q_PROPERTY(bool connected READ isConnected)
+    Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
     Q_PROPERTY(Jam::Roster* roster READ getRoster)
 
 public:
-    Client(QObject *parent=0) : QObject(parent) { connected = false; }
+    Client(QObject *parent=0);
     ~Client();
 
     virtual void handlePresence( const gloox::Presence& );
@@ -36,15 +36,18 @@ public:
     virtual void onDisconnect( gloox::ConnectionError  );
 
     bool isConnected() const { return connected; }
-    Jam::Roster *getRoster() { return &roster; }
+    Jam::Roster *getRoster() { return roster; }
 
 public slots:
     void connect(QString, QString);
     void ping();
 
+signals:
+    void connectedChanged();
 
 private:
     bool connected;
+    void setConnected(bool);
 
     gloox::JID j_jid;
     gloox::Client *j_clientp = 0;
@@ -52,7 +55,7 @@ private:
     std::thread connection_thread;
     bool connection_thread_started = false;
 
-    Jam::Roster roster;
+    Jam::Roster *roster = 0;
 };
 
 #endif // JAMCLIENT_H

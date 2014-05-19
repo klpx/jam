@@ -1,5 +1,10 @@
 #include "client.h"
 
+Jam::Client::Client(QObject *parent) : QObject(parent)
+{
+    roster = new Jam::Roster;
+    setConnected(false);
+}
 
 Jam::Client::~Client()
 {
@@ -9,8 +14,15 @@ Jam::Client::~Client()
     if (j_clientp) {
         delete j_clientp;
     }
+    delete roster;
 }
 
+
+void Jam::Client::setConnected(bool value)
+{
+    connected = value;
+    emit connectedChanged();
+}
 
 void Jam::Client::connect(QString username, QString password)
 {
@@ -24,7 +36,7 @@ void Jam::Client::connect(QString username, QString password)
             j_clientp->registerConnectionListener(this);
             j_clientp->registerPresenceHandler(this);
 
-            j_clientp->rosterManager()->registerRosterListener(&roster, false);
+            j_clientp->rosterManager()->registerRosterListener(roster, false);
 
             j_clientp->connect(true);
         },
@@ -50,19 +62,19 @@ void Jam::Client::handlePresence( const gloox::Presence& presence )
 
 void Jam::Client::onConnect()
 {
-    connected = true;
+    setConnected(true);
     qDebug("Connected");
 }
 
 bool Jam::Client::onTLSConnect( const gloox::CertInfo& info )
 {
-    connected = true;
+    setConnected(true);
     qDebug("Connected with TLS");
     return true;
 }
 
 void Jam::Client::onDisconnect( gloox::ConnectionError e )
 {
-    connected = false;
+    setConnected(false);
     qDebug("Disconnected");
 }

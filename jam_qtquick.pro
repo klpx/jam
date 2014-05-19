@@ -2,12 +2,13 @@ TEMPLATE = app
 
 QT += qml quick widgets
 
-QMAKE_CXXFLAGS += -std=c++0x -Wunused-parameter
+QMAKE_CXXFLAGS += -std=c++0x -Wno-unused-parameter
 
 SOURCES += \
     src/main.cpp \
     src/jam/client.cpp \
-    src/jam/roster.cpp
+    src/jam/roster.cpp \
+    src/ui/contact.cpp
 
 RESOURCES += \
     src/qml.qrc
@@ -25,4 +26,7 @@ DEPENDPATH += /usr/local/include
 
 HEADERS += \
     src/jam/client.h \
-    src/jam/roster.h
+    src/jam/roster.h \
+    src/ui/contact.h
+
+OTHER_FILES +=
