@@ -68,7 +68,7 @@ ApplicationWindow {
     }
 
     function switchToMainWindow() {
-        loginWindow.close()
         loader.source="main.qml"
+        loginWindow.close()
     }
 }

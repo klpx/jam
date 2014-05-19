@@ -41,6 +41,7 @@ public:
 public slots:
     void connect(QString, QString);
     void ping();
+    void closeConnection();
 
 signals:
     void connectedChanged();

@@ -17,6 +17,13 @@ Jam::Client::~Client()
     delete roster;
 }
 
+void Jam::Client::closeConnection()
+{
+    if (connected) {
+        j_clientp->disconnect();
+    }
+}
+
 
 void Jam::Client::setConnected(bool value)
 {
