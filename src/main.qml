@@ -25,6 +25,25 @@ ApplicationWindow {
                 jamClient.ping()
             }
         }
+
+        Button {
+            id: addContactButton
+            x: 381
+            y: 103
+            text: qsTr("Add contact")
+            onClicked: {
+                jamClient.subscribe(addContactUsername.text)
+            }
+        }
+
+        TextField {
+            id: addContactUsername
+            x: 283
+            y: 72
+            width: 180
+            height: 25
+            placeholderText: qsTr("Text Field")
+        }
     }
 
     ListView {
@@ -67,5 +86,6 @@ ApplicationWindow {
             }
         }
         model: jamClient.roster.contacts
+
     }
 }

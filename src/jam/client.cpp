@@ -15,6 +15,8 @@ Jam::Client::~Client()
         delete j_clientp;
     }
     delete roster;
+
+
 }
 
 void Jam::Client::closeConnection()
@@ -34,21 +36,33 @@ void Jam::Client::setConnected(bool value)
 void Jam::Client::connect(QString username, QString password)
 {
     connection_thread = std::thread(
-        [this] (QString username, QString password) {
+        [this, username, password] () {
             connection_thread_started = true;
 
-            j_jid.setJID("jam@xmpp.ru");
+            j_jid.setJID(username.toStdString());
 
-            j_clientp = new gloox::Client(j_jid, "******");
+            j_clientp = new gloox::Client(j_jid, password.toStdString());
+
             j_clientp->registerConnectionListener(this);
             j_clientp->registerPresenceHandler(this);
+            j_clientp->registerMessageSessionHandler(this);
 
             j_clientp->rosterManager()->registerRosterListener(roster, false);
 
+            j_clientp->disco()->setVersion("Jam", "0.0.1");
+            j_clientp->disco()->setIdentity("client", "pc"); // http://xmpp.org/registrar/disco-categories.html#client
+
             j_clientp->connect(true);
-        },
-        username, password
+        }
     );
+}
+
+void Jam::Client::subscribe(QString username)
+{
+    qDebug("Subscribe to");
+    qDebug(username.toStdString().data());
+    gloox::JID jid(username.toStdString());
+    j_clientp->rosterManager()->subscribe(jid);
 }
 
 void Jam::Client::ping()
@@ -65,6 +79,7 @@ void Jam::Client::ping()
 
 void Jam::Client::handlePresence( const gloox::Presence& presence )
 {
+    qDebug("presence");
 }
 
 void Jam::Client::onConnect()
@@ -84,4 +99,9 @@ void Jam::Client::onDisconnect( gloox::ConnectionError e )
 {
     setConnected(false);
     qDebug("Disconnected");
+}
+
+void Jam::Client::handleMessageSession( gloox::MessageSession * session )
+{
+    chats.emplace_back(session);
 }

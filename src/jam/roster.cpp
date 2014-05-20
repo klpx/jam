@@ -38,11 +38,13 @@ void Roster::handleRoster (const gloox::Roster &initialRoster)
 {
     qDebug("handleRoster");
     roster = &initialRoster;
+
+    printf("%d contacts", roster->size());
     
     gloox::Roster::const_iterator pair;
     for(pair = roster->begin(); pair != roster->end(); ++pair)
     {
-        Jam::Contact *contact = new Jam::Contact(pair->first);
+        Jam::Contact *contact = new Jam::Contact(pair->second);
         j_contacts.append(contact);
     }
     emit onContactsChanged();

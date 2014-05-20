@@ -8,7 +8,8 @@ SOURCES += \
     src/main.cpp \
     src/jam/client.cpp \
     src/jam/roster.cpp \
-    src/ui/contact.cpp
+    src/ui/contact.cpp \
+    src/jam/chat.cpp
 
 RESOURCES += \
     src/qml.qrc
@@ -27,6 +28,7 @@ DEPENDPATH += /usr/local/include
 HEADERS += \
     src/jam/client.h \
     src/jam/roster.h \
-    src/ui/contact.h
+    src/ui/contact.h \
+    src/jam/chat.h
 
 OTHER_FILES +=

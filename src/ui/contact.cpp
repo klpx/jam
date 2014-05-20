@@ -1,18 +1,27 @@
 #include "contact.h"
 
-//Contact::Contact(QObject *parent) :
-//    QObject(parent)
-//{
-//}
-
 Jam::Contact::Contact(QObject *parent)
     : QObject(parent)
 {
-    j_name = "no name";
+    qDebug("Jam::Contact copy");
+    //j_name = parent->;
+    //j_online = parent.j_online;
+}
+
+Jam::Contact::Contact(gloox::RosterItem *item)
+{
+    j_name = item->name().data();
+    j_online = item->online();
+    qDebug("new item");
 }
 
 
-Jam::Contact::Contact(std::string name)
+QString Jam::Contact::name()
 {
-    j_name = name.data();
+    return j_name;
+}
+
+bool Jam::Contact::isOnline()
+{
+    return j_online;
 }

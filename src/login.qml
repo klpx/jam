@@ -62,7 +62,7 @@ ApplicationWindow {
             y: 263
             text: qsTr("Sign in")
             onClicked: {
-                jamClient.connect(usernameInput.getText(), passwordInput.getText());
+                jamClient.connect(usernameInput.text, passwordInput.text);
             }
         }
     }
