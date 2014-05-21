@@ -14,7 +14,7 @@ class Jam::Contact : public QObject
     Q_OBJECT
     
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(bool isOnline READ isOnline NOTIFY isOnlineChanged)
+    Q_PROPERTY(bool online READ isOnline NOTIFY isOnlineChanged)
     
 public:
     Contact(QObject *parent = 0);
@@ -24,7 +24,7 @@ public:
     QString jid();
     bool isOnline();
 
-    void update(gloox::RosterItem *);
+    void update(const gloox::RosterItem *);
 
 signals:   
     void isOnlineChanged();

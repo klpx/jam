@@ -16,8 +16,6 @@ Jam::Client::~Client()
         delete j_clientp;
     }
     delete roster;
-
-
 }
 
 void Jam::Client::closeConnection()
@@ -45,12 +43,11 @@ void Jam::Client::connect(QString username, QString password)
             j_clientp = new gloox::Client(j_jid, password.toStdString());
 
             j_clientp->registerConnectionListener(this);
-            j_clientp->registerPresenceHandler(this);
             j_clientp->registerMessageSessionHandler(this);
 
-            j_clientp->rosterManager()->registerRosterListener(roster, false);
+            roster->init(j_clientp->rosterManager());
 
-            j_clientp->disco()->setVersion("Jam", "0.0.1");
+            j_clientp->disco()->setVersion("Jam", "0.0.3");
             j_clientp->disco()->setIdentity("client", "pc"); // http://xmpp.org/registrar/disco-categories.html#client
 
             j_clientp->connect(true);
@@ -75,12 +72,6 @@ void Jam::Client::ping()
     gloox::Message msg(type, rcpt, "ping pong");
 
     j_clientp->send(msg);
-}
-
-
-void Jam::Client::handlePresence( const gloox::Presence& presence )
-{
-    qDebug("presence");
 }
 
 void Jam::Client::onConnect()

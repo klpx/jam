@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QQmlListProperty>
+#include <QDebug>
 
 #include <gloox/client.h>
 #include <gloox/rosterlistener.h>
@@ -26,6 +27,7 @@ class Jam::Roster :
 
 public:
     Roster(QObject *parent = 0) : QObject(parent) {}
+    void init(gloox::RosterManager *);
 
     QQmlListProperty<Jam::Contact> contacts();
 
@@ -50,6 +52,7 @@ private:
 //    gloox::RosterManager *j_roster_manager = 0;
     const gloox::Roster *roster = 0;
     QList<Jam::Contact *> j_contacts;
+    gloox::RosterManager *manager;
 };
 
 #endif // JAM_ROSTER_H

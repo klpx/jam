@@ -19,9 +19,6 @@ ApplicationWindow {
             y: 262
             text: qsTr("Ping")
             onClicked: {
-                for (var i in jamClient.roster.contacts) {
-                    console.log(jamClient.roster.contacts[i].name)
-                }
                 jamClient.ping()
             }
         }
@@ -74,6 +71,12 @@ ApplicationWindow {
                         anchors.fill: parent
                         anchors.topMargin: 1
                         color: "#161617"
+
+                        Rectangle {
+                            color: model.online ? "green" : "red"
+                            width: 10; height: 10; radius: 2
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
 
                         Text {
                             anchors.verticalCenter: parent.verticalCenter

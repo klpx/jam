@@ -3,6 +3,11 @@
 
 namespace Jam {
 
+void Roster::init(gloox::RosterManager *initialManager)
+{
+    manager = initialManager;
+    manager->registerRosterListener(this, false);
+}
 
 QQmlListProperty<Jam::Contact> Roster::contacts()
 {
@@ -11,9 +16,9 @@ QQmlListProperty<Jam::Contact> Roster::contacts()
 
 void Roster::handleItemAdded (const gloox::JID &jid)
 {
-    gloox::Roster::const_iterator newItem = roster->find(jid.full());
-    if (newItem != roster->end()) {
-        Jam::Contact *newContact = new Jam::Contact(newItem->second);
+    gloox::RosterItem *newItem = manager->getRosterItem(jid);
+    if (newItem) {
+        Jam::Contact *newContact = new Jam::Contact(newItem);
         j_contacts.append(newContact);
         emit onContactsChanged();
     }
@@ -34,15 +39,15 @@ void Roster::handleItemRemoved (const gloox::JID &jid)
 
 void Roster::handleItemUpdated (const gloox::JID &jid)
 {
-    gloox::Roster::const_iterator updateItem = roster->find(jid.full());
-    if (updateItem != roster->end()) {
+    gloox::RosterItem *updateItem = manager->getRosterItem(jid);
+    if (updateItem) {
         bool updated = false;
         QList<Jam::Contact *>::const_iterator contact;
         for (contact = j_contacts.begin(); contact != j_contacts.end(); ++contact)
         {
-            if ((*contact)->jid() == updateItem->first.data())
+            if ((*contact)->jid() == updateItem->jid().data())
             {
-                (*contact)->update(updateItem->second);
+                (*contact)->update(updateItem);
                 updated = true;
                 emit onContactsChanged();
                 break;
@@ -64,10 +69,7 @@ void Roster::handleItemUnsubscribed (const gloox::JID &jid)
 
 void Roster::handleRoster (const gloox::Roster &initialRoster)
 {
-    qDebug("handleRoster");
     roster = &initialRoster;
-
-    printf("%d contacts", roster->size());
     
     gloox::Roster::const_iterator pair;
     for(pair = roster->begin(); pair != roster->end(); ++pair)
@@ -80,7 +82,16 @@ void Roster::handleRoster (const gloox::Roster &initialRoster)
 
 void Roster::handleRosterPresence (const gloox::RosterItem &item, const std::string &resource, gloox::Presence::PresenceType presence, const std::string &msg)
 {
-    qDebug("handleRosterPresence");
+    QList<Jam::Contact *>::const_iterator contact;
+    for (contact = j_contacts.begin(); contact != j_contacts.end(); ++contact)
+    {
+        if ((*contact)->jid() == item.jid().data())
+        {
+            (*contact)->update(&item);
+            emit onContactsChanged();
+            break;
+        }
+    }
 }
 
 void Roster::handleSelfPresence (const gloox::RosterItem &item, const std::string &resource, gloox::Presence::PresenceType presence, const std::string &msg)
@@ -90,8 +101,8 @@ void Roster::handleSelfPresence (const gloox::RosterItem &item, const std::strin
 
 bool Roster::handleSubscriptionRequest (const gloox::JID &jid, const std::string &msg)
 {
-    qDebug("handleSubscriptionRequest, returned true");
-    return true;
+    qDebug() << "handleSubscriptionRequest from " << jid.full().data() << " with message: `" << msg.data() << "`";
+    manager->ackSubscriptionRequest(jid, true);
 }
 
 bool Roster::handleUnsubscriptionRequest (const gloox::JID &jid, const std::string &msg)

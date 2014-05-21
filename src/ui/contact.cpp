@@ -18,7 +18,7 @@ Jam::Contact::Contact(gloox::RosterItem *item)
     emit isOnlineChanged();
 }
 
-void Jam::Contact::update(gloox::RosterItem *item)
+void Jam::Contact::update(const gloox::RosterItem *item)
 {
     j_jid = item->jid().data();
     j_name = item->jid().data();

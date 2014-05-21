@@ -24,7 +24,7 @@ namespace Jam {
 
 class Jam::Client :
         public QObject,
-        gloox::ConnectionListener, gloox::PresenceHandler, gloox::MessageSessionHandler
+        gloox::ConnectionListener, gloox::MessageSessionHandler
 {
     Q_OBJECT
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
@@ -34,7 +34,6 @@ public:
     Client(QObject *parent=0);
     ~Client();
 
-    virtual void handlePresence( const gloox::Presence& );
     virtual void onConnect();
     virtual bool onTLSConnect( const gloox::CertInfo& );
     virtual void onDisconnect( gloox::ConnectionError  );
