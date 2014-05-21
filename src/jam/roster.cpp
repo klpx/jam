@@ -11,7 +11,15 @@ QQmlListProperty<Jam::Contact> Roster::contacts()
 
 void Roster::handleItemAdded (const gloox::JID &jid)
 {
-    qDebug("handleItemAdded");
+    gloox::Roster::const_iterator newItem = roster->find(jid.full());
+    if (newItem != roster->end()) {
+        Jam::Contact *newContact = new Jam::Contact(newItem->second);
+        j_contacts.append(newContact);
+        emit onContactsChanged();
+    }
+    else {
+        qDebug("New item not found in gloox::Roster");
+    }
 }
 
 void Roster::handleItemSubscribed (const gloox::JID &jid)
@@ -26,7 +34,27 @@ void Roster::handleItemRemoved (const gloox::JID &jid)
 
 void Roster::handleItemUpdated (const gloox::JID &jid)
 {
-    qDebug("handleItemUpdated");
+    gloox::Roster::const_iterator updateItem = roster->find(jid.full());
+    if (updateItem != roster->end()) {
+        bool updated = false;
+        QList<Jam::Contact *>::const_iterator contact;
+        for (contact = j_contacts.begin(); contact != j_contacts.end(); ++contact)
+        {
+            if ((*contact)->jid() == updateItem->first.data())
+            {
+                (*contact)->update(updateItem->second);
+                updated = true;
+                emit onContactsChanged();
+                break;
+            }
+        }
+        if (!updated) {
+            qDebug("Item to update is not found in Jam::Roster");
+        }
+    }
+    else {
+        qDebug("Item to update is not found in gloox::Roster");
+    }
 }
 
 void Roster::handleItemUnsubscribed (const gloox::JID &jid)

@@ -28,7 +28,7 @@ class Jam::Client :
 {
     Q_OBJECT
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
-    Q_PROPERTY(Jam::Roster* roster READ getRoster)
+    Q_PROPERTY(Jam::Roster* roster READ getRoster NOTIFY rosterChanged)
 
 public:
     Client(QObject *parent=0);
@@ -51,6 +51,7 @@ public slots:
 
 signals:
     void connectedChanged();
+    void rosterChanged();
 
 private:
     bool connected;

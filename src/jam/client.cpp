@@ -3,6 +3,7 @@
 Jam::Client::Client(QObject *parent) : QObject(parent)
 {
     roster = new Jam::Roster;
+    emit rosterChanged();
     setConnected(false);
 }
 

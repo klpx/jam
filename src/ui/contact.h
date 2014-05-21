@@ -13,22 +13,28 @@ class Jam::Contact : public QObject
 {
     Q_OBJECT
     
-    Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(bool isOnline READ isOnline)
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(bool isOnline READ isOnline NOTIFY isOnlineChanged)
     
 public:
     Contact(QObject *parent = 0);
     Contact(gloox::RosterItem *);
 
     QString name();
+    QString jid();
     bool isOnline();
 
-signals:
+    void update(gloox::RosterItem *);
+
+signals:   
+    void isOnlineChanged();
+    void nameChanged();
 
 public slots:
     
 private:
     QString j_name;
+    QString j_jid;
     bool j_online;
 };
 

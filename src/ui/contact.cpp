@@ -10,15 +10,32 @@ Jam::Contact::Contact(QObject *parent)
 
 Jam::Contact::Contact(gloox::RosterItem *item)
 {
-    j_name = item->name().data();
+    j_jid = item->jid().data();
+    j_name = item->jid().data();
     j_online = item->online();
-    qDebug("new item");
+
+    emit nameChanged();
+    emit isOnlineChanged();
 }
 
+void Jam::Contact::update(gloox::RosterItem *item)
+{
+    j_jid = item->jid().data();
+    j_name = item->jid().data();
+    j_online = item->online();
+
+    emit nameChanged();
+    emit isOnlineChanged();
+}
 
 QString Jam::Contact::name()
 {
     return j_name;
+}
+
+QString Jam::Contact::jid()
+{
+    return j_jid;
 }
 
 bool Jam::Contact::isOnline()

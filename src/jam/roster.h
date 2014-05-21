@@ -22,7 +22,7 @@ class Jam::Roster :
 {
     Q_OBJECT
     
-    Q_PROPERTY(QQmlListProperty<Jam::Contact> contacts READ contacts NOTIFY onContactsChanged CONSTANT)
+    Q_PROPERTY(QQmlListProperty<Jam::Contact> contacts READ contacts NOTIFY onContactsChanged)
 
 public:
     Roster(QObject *parent = 0) : QObject(parent) {}
